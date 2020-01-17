@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'device.php');
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Pi Dashboard</title>
+    <title>Pi Lab - Pi Dashboard</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -14,6 +14,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'device.php');
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
     <link href="assets/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../bl-themes/blekathlon-pilab/img/favicon.ico" type="image/png">
     <script src="assets/jquery-3.1.1.min.js"></script>
     <script src="assets/highcharts.js"></script>
     <script src="assets/highcharts-more.js"></script>
@@ -26,52 +27,24 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'device.php');
         var init_vals = eval('('+"{'mem': {'total':<?php echo($D['mem']['total']) ?>,'swap':{'total':<?php echo($D['mem']['swap']['total']) ?>}}, 'disk': {'total':<?php echo($D['disk']['total']) ?>}, 'net': { 'count': <?php echo($D['net']['count']) ?>} }"+')');
     </script>
     <style type="text/css">
-        .label {color: #999999; font-size: 75%; font-weight: bolder;}
+        .label {color: #999999; font-size: 100%; font-weight: bolder;}
+        .eth0, .wlan0, .lo {display: none !important;}
     </style>
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Pi Dashboard</a>
-            </div>
 
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a target="_blank" href="http://ee-fans.com">Yuan's Blog</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">About <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a target="_blank" href="http://ee-fans.com/?p=16">如何安装(Rock64)</a></li>
-                            <li><a target="_blank" href="http://ee-fans.com/how-to-install-pi-dashboard-on-raspberry-pi/">如何安装(Raspberry Pi)</a></li>
-                            <li><a target="_blank" href="http://ee-fans.com/how-to-install-pi-dashboard-on-raspberry-pi/">How to install(Raspberry Pi)</a></li>
-                            <li><a target="_blank" href="http://ee-fans.com/how-to-deploy-pi-dashboard-on-rock64/">How to install(Rock64)</a></li>
-                            <li><a target="_blank" href="https://github.com/YuanGao-NAU/Pi-Utility">GitHub Source</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <div style="text-align: center; padding: 20px 0;"><img src="assets/devices/<?php echo($D['model']['id']) ?>.png" /></div>
+                <div style="text-align: center; padding: 20px 0;"><img style="max-width: 130px;" src="../bl-content/uploads/Pi%20Lab.png" /></div>
                 <div style="background-color: #E0E0E0; padding: 5px; border-radius: 3px;">
+                    <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FAFAFA; border-radius: 3px;"><div class="label">HOSTNAME</div><div id="hostname" style="font-size: 110%; font-weight: bolder;"><?php echo($D['hostname']); ?></div></div>
                     <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#CEFCA3; border-radius: 3px;"><div class="label">IP</div><div id="hostip" style="font-size: 150%; font-weight: bolder;"><?php echo($D['hostip']); ?></div></div>
                     <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#9DCFFB; border-radius: 3px;"><div class="label">TIME</div><div id="time" style="font-size: 150%; font-weight: bolder;">00:00</div><div id="date">-</div></div>
                     <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FFFECD; border-radius: 3px;"><div class="label">UPTIME</div><div id="uptime" style="font-size: 120%; font-weight: bolder;">0</div></div>
-                    <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FAFAFA; border-radius: 3px;"><div class="label">USER</div><div id="user" style="font-size: 120%; font-weight: bolder;"><?php echo($D['user']); ?></div></div>
                     <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FAFAFA; border-radius: 3px;"><div class="label">OS</div><div id="os" style="font-size: 120%; font-weight: bolder;"><?php echo($D['os'][0]); ?></div></div>
-                    <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FAFAFA; border-radius: 3px;"><div class="label">HOSTNAME</div><div id="hostname" style="font-size: 110%; font-weight: bolder;"><?php echo($D['hostname']); ?></div></div>
                     <div class="text-center" style="margin:20px; padding: 10px 0 10px 0; background-color:#FAFAFA; border-radius: 3px;"><div id="uname" style="word-break:break-all; word-wrap:break-word; font-size: 12px; color: #999999; padding: 0 10px;"><?php echo($D['uname']); ?></div></div>
                 </div>
             </div>
@@ -214,7 +187,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'device.php');
                         for($i = 0; $i<$D['net']['count'];$i++)
                         {
                             ?>
-                            <div class="row" style="margin: 0;">
+                            <div class="row <?php echo($D['net']['interfaces'][$i]['name']) ?>" style="margin: 0;">
                                 <div class="col-md-10 col-sm-10 col-xs-10" style="padding: 0;">
                                     <div id="container-net-interface-<?php echo($i+1) ?>" style="min-width: 100%; height: 150px; margin: 20 auto"></div>
                                 </div>
@@ -242,7 +215,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'device.php');
             <div class="col-md-12">
                 <div id="footer">
                     <hr style="margin: 20px 0 10px 0;" />
-                    <p class="pull-left" style="font-size: 12px;">Powered by <a target="_blank" href="http://ee-fans.com/how-to-install-pi-dashboard-on-raspberry-pi">Pi Dashboard</a> v<?php echo($D['version']) ?>, <a target="_blank" href="ee-fans.com">ee-fans.com</a> all rights reserved.
+                    <p class="pull-left" style="font-size: 12px;">Powered by <a target="_blank" href="https://github.com/YuanGao-NAU/Pi-Utility">Pi Dashboard</a> v<?php echo($D['version']) ?>
                     </p>
                 </div>
             </div>
